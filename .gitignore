@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+*.tgz
+
+# Local runtime artifacts
+*.log
+*.out.jsonl
+frames/
+_reports/
+
+# Nested DSH profiles / sandboxes used during isolation testing
+hudtest/
+tools/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

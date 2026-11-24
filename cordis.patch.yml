@@ -1,0 +1,5 @@
+# dsh-workbench bundle layer.
+# Inserts one loader row; that package's dsh.client half contributes the UI.
+- insert:
+    - id: ui-workbench
+      name: 'dsh-workbench'
