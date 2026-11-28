@@ -8,7 +8,7 @@
  * any machine; pass a real log to check the live fold as well.
  */
 import { readFileSync } from 'node:fs'
-import { workbenchStatsDefinition as def } from '../lib/index.js'
+import { powertoysStatsDefinition as def } from '../lib/index.js'
 
 const MIN = 60_000
 

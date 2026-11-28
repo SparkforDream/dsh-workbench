@@ -38,6 +38,8 @@ const reactStub = {
 const registrations = []
 const injections = []
 
+const shortcutRegistrations = []
+
 const ctx = {
   effect(factory) {
     const dispose = factory()
@@ -47,13 +49,20 @@ const ctx = {
   },
   /**
    * `ctx.inject(names, scope => ...)`: activate only when every named service
-   * exists. The plugin's shortcut registration lives behind this, and a real
-   * fiber would never run it if `shortcuts` were absent — so the stub simply
-   * refuses, which is the truthful outcome for a host without that service.
+   * exists. Also exercise `shortcuts` registration so its contract is checked.
    */
   inject(services, factory) {
     if (services.includes('shortcuts')) {
-      console.log('  (shortcuts service absent in this stub: registration skipped)')
+      const scope = {
+        effect: ctx.effect,
+        shortcuts: {
+          register(spec) {
+            shortcutRegistrations.push(spec)
+            return { dispose() {} }
+          },
+        },
+      }
+      factory(scope)
       return
     }
     factory(ctx)
@@ -136,7 +145,7 @@ if (definition === undefined) {
 
 console.log(`module id: ${definition.id}`)
 
-if (definition.id !== 'dsh-workbench') {
+if (definition.id !== 'dsh-powertoys') {
   console.error(`FAIL  module id is ${JSON.stringify(definition.id)}`)
   process.exit(1)
 }
@@ -182,12 +191,27 @@ check('every entry carries a name', names.every(name => typeof name === 'string'
 check('one inject per slot', injections.length - new Set(injections).size, 0)
 
 const section = registrations.find(entry => entry.name === 'settings.section')
-check('settings section is discoverable', typeof section?.label === 'function' ? section.label() : null, '会话工作台')
+check('settings section is discoverable', typeof section?.label === 'function' ? section.label() : null, 'DSH PowerToys')
 
 const headerOrders = registrations
   .filter(entry => entry.name === 'conversation.session.header.utilities')
   .map(entry => entry.order)
 check('header entries are ordered and distinct', headerOrders.length - new Set(headerOrders).size, 0)
+
+const expectedIds = [
+  'powertoys:explorer',
+  'powertoys:duration',
+  'powertoys:find',
+  'powertoys:reload',
+  'powertoys:find-bar',
+  'powertoys:alert',
+  'powertoys',
+]
+check('all 5 modular features + settings slots registered', expectedIds.every(id => ids.includes(id)), true)
+
+const findShortcut = shortcutRegistrations.find(entry => entry.id === 'powertoys.find')
+check('powertoys.find shortcut registered', findShortcut !== undefined, true)
+check('powertoys.find shortcut resolves handled by default', findShortcut?.resolve?.()?.status, 'handled')
 
 console.log('')
 console.log(failures === 0 ? 'ALL CHECKS PASSED' : `${failures} CHECK(S) FAILED`)

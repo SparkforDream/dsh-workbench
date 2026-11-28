@@ -1,5 +1,5 @@
-# dsh-workbench bundle layer.
+# dsh-powertoys bundle layer.
 # Inserts one loader row; that package's dsh.client half contributes the UI.
 - insert:
-    - id: ui-workbench
-      name: 'dsh-workbench'
+    - id: ui-powertoys
+      name: 'dsh-powertoys'

@@ -1,5 +1,5 @@
 # Verification overlay: applied AFTER the desktop profile layer, adding only
-# the workbench row. Every shipped and third-party row stays untouched.
+# the powertoys row. Every shipped and third-party row stays untouched.
 - insert:
-    - id: ui-workbench
-      name: dsh-workbench
+    - id: ui-powertoys
+      name: dsh-powertoys

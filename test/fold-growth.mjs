@@ -11,7 +11,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { zstdDecompressSync } from 'node:zlib'
-import { workbenchStatsDefinition as def } from '../lib/index.js'
+import { powertoysStatsDefinition as def } from '../lib/index.js'
 
 function newestLog(root) {
   const found = []

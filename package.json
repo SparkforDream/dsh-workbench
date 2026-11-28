@@ -1,17 +1,17 @@
 {
-  "name": "dsh-workbench",
-  "version": "0.3.0",
-  "description": "会话看板：AI 实际工作时长（剔除等待审批与回答）、按工具聚合耗时、资源管理器快捷入口、会话内查找，以及需要确认时的重复提醒音。",
+  "name": "dsh-powertoys",
+  "version": "0.4.0",
+  "description": "DSH PowerToys：模块化工作台工具集，支持在设置页独立开关 AI 实际工作时长、工作区目录入口、会话内查找、页面刷新与需要确认时的重复提醒音，即时生效。",
   "type": "module",
   "license": "MIT",
   "author": "goldenglow",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SparkforDream/dsh-workbench.git"
+    "url": "git+https://github.com/SparkforDream/dsh-powertoys.git"
   },
-  "homepage": "https://github.com/SparkforDream/dsh-workbench#readme",
+  "homepage": "https://github.com/SparkforDream/dsh-powertoys#readme",
   "bugs": {
-    "url": "https://github.com/SparkforDream/dsh-workbench/issues"
+    "url": "https://github.com/SparkforDream/dsh-powertoys/issues"
   },
   "main": "lib/index.js",
   "exports": {
@@ -24,6 +24,7 @@
     "dsh-plugin",
     "deepseek-harness",
     "cordis",
+    "powertoys",
     "timing",
     "stats"
   ],

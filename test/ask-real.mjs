@@ -9,7 +9,7 @@
  */
 import { readFileSync } from 'node:fs'
 import { zstdDecompressSync } from 'node:zlib'
-import { workbenchStatsDefinition as def } from '../lib/index.js'
+import { powertoysStatsDefinition as def } from '../lib/index.js'
 
 const file = process.argv[2]
 if (file === undefined) {

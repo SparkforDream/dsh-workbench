@@ -15,7 +15,7 @@
  */
 import { readFileSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
-import { workbenchStatsDefinition as workbench } from '../lib/index.js'
+import { powertoysStatsDefinition as powertoys } from '../lib/index.js'
 
 /**
  * Resolve the shipped sessionStats unit only when running real-log comparison
@@ -55,10 +55,10 @@ if (file !== undefined && shipped !== undefined) {
     events.push(record)
   }
   const header = { id: 'synthetic', createdAt: events[0]?.time ?? 0 }
-  let mine = workbench.init(header, 0)
+  let mine = powertoys.init(header, 0)
   let theirs = shipped.init(header, 0)
   for (const event of events) {
-    mine = workbench.apply(mine, event)
+    mine = powertoys.apply(mine, event)
     theirs = shipped.apply(theirs, event)
   }
   console.log('--- agreement with @deepseek-ai/dsh-session-stats ---')
@@ -110,9 +110,9 @@ function turnWithWait({ start, waitMs, decide = true, callId = 'call-1', tool = 
 console.log('--- approval wait is subtracted from AI working time ---')
 {
   const { events, endAt } = turnWithWait({ start: T0, waitMs: 10 * MIN })
-  let state = workbench.init({ id: 's', createdAt: T0 }, 0)
-  for (const e of events) state = workbench.apply(state, e)
-  const v = workbench.wire.viewSchema.parse(workbench.wire.view(state))
+  let state = powertoys.init({ id: 's', createdAt: T0 }, 0)
+  for (const e of events) state = powertoys.apply(state, e)
+  const v = powertoys.wire.viewSchema.parse(powertoys.wire.view(state))
 
   const stepSpan = endAt - (T0 + 1_000)          // whole step, wait included
   // tool/call lands 20 ms before the question is asked, so the raw span is
@@ -132,9 +132,9 @@ console.log('')
 console.log('--- an approval the user never answers does not leak ---')
 {
   const { events } = turnWithWait({ start: T0, waitMs: 10 * MIN, decide: false })
-  let state = workbench.init({ id: 's', createdAt: T0 }, 0)
-  for (const e of events) state = workbench.apply(state, e)
-  const v = workbench.wire.viewSchema.parse(workbench.wire.view(state))
+  let state = powertoys.init({ id: 's', createdAt: T0 }, 0)
+  for (const e of events) state = powertoys.apply(state, e)
+  const v = powertoys.wire.viewSchema.parse(powertoys.wire.view(state))
   check('no wait accumulated', v.approvalMs, 0)
   check('open asks cleared on turn/end', Object.keys(v.askOpen).length, 0)
   check('tool time unaffected', v.toolMs, 0)
@@ -144,9 +144,9 @@ console.log('')
 console.log('--- approved work still books its own duration ---')
 {
   const { events } = turnWithWait({ start: T0, waitMs: 30_000, workMs: 5_000 })
-  let state = workbench.init({ id: 's', createdAt: T0 }, 0)
-  for (const e of events) state = workbench.apply(state, e)
-  const v = workbench.wire.view(state)
+  let state = powertoys.init({ id: 's', createdAt: T0 }, 0)
+  for (const e of events) state = powertoys.apply(state, e)
+  const v = powertoys.wire.view(state)
   // 20 ms of pre-question dispatch + 5 s of execution; the 30 s wait is out.
   check('toolMs is execution plus dispatch only', v.toolMs, 5_020)
   check('calls counted', v.tools.pwsh?.calls, 1)
@@ -159,10 +159,10 @@ console.log('--- approved work still books its own duration ---')
 console.log('')
 console.log('--- aborted turn clears openStep so badge stops ticking ---')
 {
-  let state = workbench.init({ id: 's', createdAt: T0 }, 0)
-  state = workbench.apply(state, event('step/start', T0, { turn: 1, step: 1 }))
-  state = workbench.apply(state, event('turn/end', T0 + 5_000, { turn: 1 }))
-  const v = workbench.wire.viewSchema.parse(workbench.wire.view(state))
+  let state = powertoys.init({ id: 's', createdAt: T0 }, 0)
+  state = powertoys.apply(state, event('step/start', T0, { turn: 1, step: 1 }))
+  state = powertoys.apply(state, event('turn/end', T0 + 5_000, { turn: 1 }))
+  const v = powertoys.wire.viewSchema.parse(powertoys.wire.view(state))
   check('openStep cleared on turn/end', v.openStep, null)
 }
 

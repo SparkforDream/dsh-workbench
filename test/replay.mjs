@@ -1,5 +1,5 @@
 /**
- * Replay one real session log through the `workbenchStats` fold and print the
+ * Replay one real session log through the `powertoysStats` fold and print the
  * figures, next to an INDEPENDENT recount computed straight from the log with
  * a different code path. Two implementations agreeing is the point; one
  * implementation agreeing with itself proves nothing.
@@ -7,7 +7,7 @@
  * Usage: node test/replay.mjs [path-to-_concat.jsonl]
  */
 import { readFileSync } from 'node:fs'
-import { workbenchStatsDefinition as def } from '../lib/index.js'
+import { powertoysStatsDefinition as def } from '../lib/index.js'
 
 const file = process.argv[2]
 if (file === undefined) {
